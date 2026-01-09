@@ -34,24 +34,6 @@ jobs:
           hugo-version: "0.154.3"
           extended: true
 
-      # - name: Setup Node.js
-      #   uses: actions/setup-node@v4
-      #   with:
-      #     node-version: "18"
-
-      # - name: Build React Demo
-      #   working-directory: neuralnet-demo-frontend
-      #   run: |
-      #     npm ci
-      #     npm run build
-      #   env:
-      #     VITE_API_URL: ${{ secrets.API_URL }}
-
-      # - name: Copy React build to Hugo
-      #   run: |
-      #     mkdir -p DanilRukin.github.io/static/demo
-      #     cp -r neuralnet-demo-frontend/dist/* DanilRukin.github.io/static/demo/
-
       - name: Build Hugo Site
         working-directory: DanilRukin.github.io
         run: |
