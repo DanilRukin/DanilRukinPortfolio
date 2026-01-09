@@ -34,10 +34,19 @@ jobs:
           hugo-version: "0.154.3"
           extended: true
 
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@v4
+
+      - name: Initialize and update submodules
+        run: |
+          git submodule sync
+          git submodule update --init --recursive
+
       - name: Build Hugo Site
         working-directory: DanilRukin.github.io
         run: |
-          hugo --minify --baseURL "https://DanilRukin.github.io/"
+          hugo --minify --baseURL "${{ steps.pages.outputs.origin }}"
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v4
