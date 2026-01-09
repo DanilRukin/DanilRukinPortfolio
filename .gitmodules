@@ -1,0 +1,6 @@
+[submodule "DanilRukin.github.io"]
+	path = DanilRukin.github.io
+	url = https://github.com/DanilRukin/DanilRukin.github.io.git
+[submodule "SharpLeNet"]
+	path = SharpLeNet
+	url = https://github.com/DanilRukin/SharpLeNet.git

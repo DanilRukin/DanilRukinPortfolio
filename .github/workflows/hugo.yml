@@ -1,0 +1,74 @@
+name: Deploy Hugo Site to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "DanilRukin.github.io/**"
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: "0.154.3"
+          extended: true
+
+      # - name: Setup Node.js
+      #   uses: actions/setup-node@v4
+      #   with:
+      #     node-version: "18"
+
+      # - name: Build React Demo
+      #   working-directory: neuralnet-demo-frontend
+      #   run: |
+      #     npm ci
+      #     npm run build
+      #   env:
+      #     VITE_API_URL: ${{ secrets.API_URL }}
+
+      # - name: Copy React build to Hugo
+      #   run: |
+      #     mkdir -p DanilRukin.github.io/static/demo
+      #     cp -r neuralnet-demo-frontend/dist/* DanilRukin.github.io/static/demo/
+
+      - name: Build Hugo Site
+        working-directory: DanilRukin.github.io
+        run: |
+          hugo --minify --baseURL "https://DanilRukin.github.io/"
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: DanilRukin.github.io/public
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v3
